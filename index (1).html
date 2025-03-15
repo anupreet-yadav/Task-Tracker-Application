@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Task Tracker</h1>
+    <div class="task-input">
+      <input type="text" id="taskInput" placeholder="Add a new task">
+      <button id="addTaskButton">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+  <script src="script.js"></script>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const taskInput = document.getElementById("taskInput");
+  const addTaskButton = document.getElementById("addTaskButton");
+  const taskList = document.getElementById("taskList");
+
+  addTaskButton.addEventListener("click", addTask);
+  taskList.addEventListener("click", handleTaskActions);
+
+  function addTask() {
+    const taskText = taskInput.value.trim();
+    if (taskText === "") {
+      alert("Please enter a task");
+      return;
+    }
+
+    const taskItem = createTaskElement(taskText);
+    taskList.appendChild(taskItem);
+    taskInput.value = "";
+  }
+
+  function createTaskElement(taskText) {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${taskText}</span>
+      <div class="actions">
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
+      </div>
+    `;
+    return li;
+  }
+
+  function handleTaskActions(event) {
+    const target = event.target;
+    const li = target.closest("li");
+
+    if (target.classList.contains("delete")) {
+      li.remove();
+    } else if (target.classList.contains("edit")) {
+      editTask(li);
+    }
+  }
+
+  function editTask(taskItem) {
+    const taskText = taskItem.querySelector("span").textContent;
+    const newTaskText = prompt("Edit task:", taskText);
+    if (newTaskText !== null && newTaskText.trim() !== "") {
+      taskItem.querySelector("span").textContent = newTaskText.trim();
+    }
+  }
+});
+
+</script>
+</html>
